@@ -9,14 +9,9 @@ const Main = (props) => {
     const APP_URL = "https://www.omdbapi.com?apikey=20ed66a7"
 
     const [movies,setMovies] = useState([])
-    const [num,setNum] = useState(0)
-    const movie ={
-        Poster: "https://m.media-amazon.com/images/M/MV5BOTY4YjI2N2MtYmFlMC00ZjcyLTg3YjEtMDQyM2ZjYzQ5YWFkXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_SX300.jpg",
-        Title: "Batman Begins",
-        Type: "movie",
-        Year: "2005",
-        imdbID: "tt0372784",
-    }
+    const [clicked,setClicked] = useState([])
+    const [score,setScore] = useState(0)
+    const [bestScore,setBestScore] = useState(0)
 
     const getMovies = async () =>{ 
     const result = await fetch (`${APP_URL}&s=batman&page=1`)    
@@ -25,30 +20,52 @@ const Main = (props) => {
     const response2 = await result2.json()
         
         
-         setMovies([...response.Search,...response2.Search])
+         setMovies([...response.Search,...response2.Search].slice(0,12))
     }
         
-    const clickHandler = () => {
-        let random = Math.floor(Math.random() * 20);
-        console.log(random)
-    }
+    const randomiseArray = () => {
         
+        for(let i = movies.length -1 ; i > 0 ; i--){
+            
+            let j = Math.floor(Math.random() * (i + 1))
+            let temItem = movies[i]
+            movies[i] = movies[j]
+            movies[j] = temItem
+        }
+        setMovies(movies) 
+    }
+
+    const clickHandler = (e)=> {
+        randomiseArray()
+        if(!clicked.find(item => item === e.target.id)){
+            setClicked([...clicked,e.target.id])
+            setScore(score + 1)
+            
+        }else {
+            setClicked([])
+            setScore(0)
+        }
+    }
+    
     useEffect(()=>{
         getMovies()
-        clickHandler()
         
     },[])
 
-        
-        
-
-
+    useEffect(()=>{
+        if(score > bestScore){
+            setBestScore(score)
+        }
+    },[score,bestScore])
+    
     return(
         <div className='main'>
+            <Score score={score} bestScore={bestScore}/>
+            <div className='container'>
             {
-                movies.map(movie => <Card movie={movie}/> )
+                movies.map((movie,index) => <Card ramdomise={clickHandler} movie={movie} index={index}/> )
             }
-            
+            </div>  
         </div>
     )
 

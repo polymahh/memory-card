@@ -12,9 +12,33 @@
   padding:15px;
   background-color: #282c34;
   display: flex;
+  justify-content: center;
+  flex-direction: column;
+  
+}
+
+.scoreContainer{
+  background-color: #282c34;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+.scoreContainer>div{
+  padding: 5px 30px;
+  background-color: rgb(173, 173, 173);
+  color: #282c34;
+  border-radius:  10px;
+  margin-bottom: 15px;
+  font-weight: bold;
+}
+
+.container{
+  max-width: 900px;
+  display: flex;
   flex-wrap: wrap;
   gap: 15px;
   justify-content: center;
+  background-color: #282c34;
 }
 
 .card{
